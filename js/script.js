@@ -105,13 +105,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  
+  let ubicacionTexto = '';
+
+  document.getElementById('pedido-ubicacion').addEventListener('click', () => {
+    const btn = document.getElementById('pedido-ubicacion');
+    if (!navigator.geolocation) {
+      alert('Tu navegador no soporta geolocalización.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords;
+        ubicacionTexto = `https://maps.google.com/?q=${latitude},${longitude}`;
+        btn.classList.add('selected');
+        btn.textContent = 'Ubicación guardada ✔';
+      },
+      error => {
+        alert('No se pudo obtener la ubicación. Asegúrate de dar permisos.');
+      }
+    );
+  });
+
   document.getElementById('pedido-enviar').addEventListener('click', () => {
     const nombre = document.getElementById('pedido-nombre').value.trim();
     const email = document.getElementById('pedido-email').value.trim();
     const direccion = document.getElementById('pedido-direccion').value.trim();
+    const referencia = document.getElementById('pedido-referencia').value.trim();
     const detalle = document.getElementById('pedido-info').innerText;
-    const mensaje = encodeURIComponent(`¡Hola! quiero hacer un pedido:\n\n   Ubicación: ${ubicacionTexto || 'No enviada'}\n\n   Nombre: ${nombre}.\n   Tipo: ${detalle}\n   Correo: ${email}.\n   Dirección: ${direccion}.`);
-    
     const mensajePedido = document.getElementById('pedido-mensaje').value.trim();
     const tipoSeleccionado = document.querySelector('.pedido-option.selected');
 
@@ -127,9 +148,20 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Por favor completa los campos obligatorios: Nombre y Dirección.');
       return;
     }
+
+    const mensaje = encodeURIComponent(`¡Hola! quiero hacer un pedido:
+
+   Tipo: ${detalle}
+   Nombre: ${nombre}
+   Correo: ${email}
+   Dirección: ${direccion}
+   Referencia: ${referencia}
+   Detalles: ${mensajePedido}
+   Ubicación: ${ubicacionTexto || 'No enviada'}`);
+
     window.open(`https://wa.me/573213275783?text=${mensaje}`, '_blank');
-    
   });
+
 
   // Nuevos modales individuales
   document.querySelectorAll('.croissant-item').forEach(item => {
