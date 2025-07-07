@@ -1,7 +1,21 @@
 
+function actualizarContador(id, max) {
+  const el = document.getElementById(id);
+  const contador = document.getElementById(id + '-contador');
+  if (el && contador) {
+    const restante = max - el.value.length;
+    contador.textContent = `${restante} caracteres restantes`;
+  }
+}
+
+
+let ubicacionTexto = '';
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Mostrar separador con animación
   document.querySelector('.separator')?.classList.add('visible');
 
+  // Animación de aparición para secciones
   const faders = document.querySelectorAll('.fade-in');
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -13,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.1 });
   faders.forEach(f => observer.observe(f));
 
+  // Botones fijos al hacer scroll
   const heroButtons = document.querySelector('.hero-buttons');
   const heroHeight = document.querySelector('.hero').offsetHeight;
   window.addEventListener('scroll', () => {
@@ -25,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Modal “Sobre Nosotros”
   const btnSobre = document.querySelector('.btn-sobre');
   const modalSobre = document.getElementById('modal-sobre');
   const modalCloseSobre = modalSobre?.querySelector('.modal-close');
@@ -40,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Modal “Contacto”
   const btnContacto = document.querySelector('.btn-contacto');
   const modalContacto = document.getElementById('modal-contacto');
   const modalCloseContacto = modalContacto?.querySelector('.modal-close');
@@ -55,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  
   const btnPedido = document.querySelector('.btn-pedido');
   const modalPedido = document.getElementById('modal-pedido');
   const modalClosePedido = modalPedido?.querySelector('.modal-close');
@@ -72,6 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.pedido-option').forEach(btn => {
     btn.addEventListener('click', () => {
+      document.querySelectorAll('.pedido-option').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+    btn.addEventListener('click', () => {
       const tipo = btn.dataset.tipo;
       const info = {
         Express: 'Empaque en bolsa kraft para consumo inmediato.',
@@ -79,24 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Masas: 'Croissants crudos listos para hornear.',
         Muestras: 'Paquete de muestra con varios sabores.'
       };
-      document.getElementById('pedido-info').innerText = info[tipo] || 'Selecciona un tipo de pedido para ver detalles.';
-    });
-  });
-
-  let linkUbicacion = '';
-
-  document.getElementById('pedido-ubicacion').addEventListener('click', () => {
-    if (!navigator.geolocation) {
-      alert('La geolocalización no está disponible en tu navegador.');
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(position => {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      linkUbicacion = `https://maps.google.com/?q=${lat},${lon}`;
-      alert('Ubicación capturada. Se enviará con tu pedido.');
-    }, () => {
-      alert('No se pudo obtener la ubicación.');
+      document.getElementById('pedido-info').innerText = info[tipo] || 'Selecciona un tipo de pedido.';
     });
   });
 
@@ -104,22 +109,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const nombre = document.getElementById('pedido-nombre').value.trim();
     const email = document.getElementById('pedido-email').value.trim();
     const direccion = document.getElementById('pedido-direccion').value.trim();
-    const referencia = document.getElementById('pedido-referencia')?.value.trim() || '';
     const detalle = document.getElementById('pedido-info').innerText;
+    const mensaje = encodeURIComponent(`¡Hola! quiero hacer un pedido:\n\n   Ubicación: ${ubicacionTexto || 'No enviada'}\n\n   Nombre: ${nombre}.\n   Tipo: ${detalle}\n   Correo: ${email}.\n   Dirección: ${direccion}.`);
+    
+    const mensajePedido = document.getElementById('pedido-mensaje').value.trim();
+    const tipoSeleccionado = document.querySelector('.pedido-option.selected');
 
-    if (detalle === 'Selecciona un tipo de pedido para ver detalles.') {
-      alert('Por favor selecciona un tipo de pedido antes de enviar.');
+    if (!mensajePedido) {
+      alert('Por favor escribe los detalles del pedido en el campo de texto.');
+      return;
+    }
+    if (!tipoSeleccionado) {
+      alert('Por favor selecciona un tipo de pedido.');
       return;
     }
     if (!nombre || !direccion) {
       alert('Por favor completa los campos obligatorios: Nombre y Dirección.');
       return;
     }
-
-    const mensaje = encodeURIComponent(`¡Hola! quiero hacer un pedido:\n\n   Nombre: ${nombre}.\n   Tipo: ${detalle}\n   Correo: ${email}.\n   Dirección: ${direccion}.\n   Referencia: ${referencia}\n   Ubicación: ${linkUbicacion}`);
     window.open(`https://wa.me/573213275783?text=${mensaje}`, '_blank');
+    
   });
 
+  // Nuevos modales individuales
   document.querySelectorAll('.croissant-item').forEach(item => {
     item.addEventListener('click', () => {
       const modalId = item.dataset.modal;

@@ -276,7 +276,7 @@
   </section>
 
 
-  <script src="js/script.js"></script>
+  
 
 <div id="modal-pedido" class="modal-overlay">
   <div class="modal-content">
@@ -289,14 +289,27 @@
       <button class="btn pedido-option" data-tipo="Muestras">Muestras</button>
     </div>
     <div id="pedido-info" class="pedido-info">Selecciona un tipo de pedido para ver detalles.</div>
-    <input type="text" id="pedido-nombre" class="pedido-input" placeholder="Nombre (obligatorio)" />
-    <input type="email" id="pedido-email" class="pedido-input" placeholder="Correo (opcional)" />
-    <input type="text" id="pedido-direccion" class="pedido-input" placeholder="Dirección (obligatorio)" />
-    <input type="text" id="pedido-referencia" class="pedido-input" placeholder="Indicaciones adicionales para la ubicación o puntos de referencia (opcional)" />
+<label for="pedido-mensaje" class="pedido-label">Envíanos tu pedido</label>
+<textarea id="pedido-mensaje" class="pedido-input" placeholder="Detalles del pedido..." maxlength="300" rows="4" style="resize: vertical;" oninput="actualizarContador('pedido-mensaje', 300)"></textarea>
+<div id="pedido-mensaje-contador" class="pedido-label" style="text-align: right; margin-bottom: 10px;">300 caracteres restantes</div>
+
+<input type="text" id="pedido-nombre" class="pedido-input" placeholder="Nombre (obligatorio)" maxlength="30" oninput="actualizarContador('pedido-nombre', 50)">
+<div id="pedido-nombre-contador" class="pedido-label" style="text-align: right; margin-bottom: 10px;">50 caracteres restantes</div>
+
+<input type="email" id="pedido-email" class="pedido-input" placeholder="Correo (opcional)" maxlength="30" oninput="actualizarContador('pedido-email', 50)">
+<div id="pedido-email-contador" class="pedido-label" style="text-align: right; margin-bottom: 10px;">50 caracteres restantes</div>
+
+<input type="text" id="pedido-direccion" class="pedido-input" placeholder="Dirección (obligatorio)" maxlength="30" oninput="actualizarContador('pedido-direccion', 50)">
+<div id="pedido-direccion-contador" class="pedido-label" style="text-align: right; margin-bottom: 10px;">50 caracteres restantes</div>
+
+<input type="text" id="pedido-referencia" class="pedido-input" placeholder="Indicaciones adicionales para la ubicación o puntos de referencia (opcional)" maxlength="30" oninput="actualizarContador('pedido-referencia', 50)">
+<div id="pedido-referencia-contador" class="pedido-label" style="text-align: right; margin-bottom: 10px;">50 caracteres restantes</div>
+
     <p class="pedido-promo">Regálanos tu correo electrónico para recibir descuentos y promociones.</p>
-    <button id="pedido-ubicacion" class="btn">Obtener mi ubicación</button>
+    <button id="pedido-ubicacion" class="btn">Enviar ubicación desde el mapa</button>
     <button id="pedido-enviar" class="btn">Enviar pedido por WhatsApp</button>
   </div>
 </div>
+  <script src="js/script.js"></script>
 </body>
 </html>
