@@ -1,9 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Mostrar separador con animación
   document.querySelector('.separator')?.classList.add('visible');
 
-  // Animación de aparición para secciones
   const faders = document.querySelectorAll('.fade-in');
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -15,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.1 });
   faders.forEach(f => observer.observe(f));
 
-  // Botones fijos al hacer scroll
   const heroButtons = document.querySelector('.hero-buttons');
   const heroHeight = document.querySelector('.hero').offsetHeight;
   window.addEventListener('scroll', () => {
@@ -28,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Modal “Sobre Nosotros”
   const btnSobre = document.querySelector('.btn-sobre');
   const modalSobre = document.getElementById('modal-sobre');
   const modalCloseSobre = modalSobre?.querySelector('.modal-close');
@@ -44,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Modal “Contacto”
   const btnContacto = document.querySelector('.btn-contacto');
   const modalContacto = document.getElementById('modal-contacto');
   const modalCloseContacto = modalContacto?.querySelector('.modal-close');
@@ -60,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  
   const btnPedido = document.querySelector('.btn-pedido');
   const modalPedido = document.getElementById('modal-pedido');
   const modalClosePedido = modalPedido?.querySelector('.modal-close');
@@ -85,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Masas: 'Croissants crudos listos para hornear.',
         Muestras: 'Paquete de muestra con varios sabores.'
       };
-      document.getElementById('pedido-info').innerText = info[tipo] || 'Selecciona un tipo de pedido.';
+      document.getElementById('pedido-info').innerText = info[tipo] || 'Selecciona un tipo de pedido para ver detalles.';
     });
   });
 
@@ -110,19 +104,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const nombre = document.getElementById('pedido-nombre').value.trim();
     const email = document.getElementById('pedido-email').value.trim();
     const direccion = document.getElementById('pedido-direccion').value.trim();
-    const detalle = document.getElementById('pedido-info').innerText;
     const referencia = document.getElementById('pedido-referencia')?.value.trim() || '';
-    const mensaje = encodeURIComponent(`¡Hola! quiero hacer un pedido:\n\n   Nombre: ${nombre}.\n   Tipo: ${detalle}\n   Correo: ${email}.\n   Dirección: ${direccion}.\n   Referencia: ${referencia}\n   Ubicación: ${linkUbicacion}`);
-    
+    const detalle = document.getElementById('pedido-info').innerText;
+
+    if (detalle === 'Selecciona un tipo de pedido para ver detalles.') {
+      alert('Por favor selecciona un tipo de pedido antes de enviar.');
+      return;
+    }
     if (!nombre || !direccion) {
       alert('Por favor completa los campos obligatorios: Nombre y Dirección.');
       return;
     }
+
+    const mensaje = encodeURIComponent(`¡Hola! quiero hacer un pedido:\n\n   Nombre: ${nombre}.\n   Tipo: ${detalle}\n   Correo: ${email}.\n   Dirección: ${direccion}.\n   Referencia: ${referencia}\n   Ubicación: ${linkUbicacion}`);
     window.open(`https://wa.me/573213275783?text=${mensaje}`, '_blank');
-    
   });
 
-  // Nuevos modales individuales
   document.querySelectorAll('.croissant-item').forEach(item => {
     item.addEventListener('click', () => {
       const modalId = item.dataset.modal;
