@@ -110,6 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('pedido-ubicacion').addEventListener('click', () => {
     const btn = document.getElementById('pedido-ubicacion');
+    if (location.protocol !== 'https:') {
+      alert('La ubicación solo se puede enviar en sitios seguros (HTTPS).');
+      return;
+    }
     if (!navigator.geolocation) {
       alert('Tu navegador no soporta geolocalización.');
       return;
